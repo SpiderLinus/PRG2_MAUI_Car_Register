@@ -1,5 +1,6 @@
 ﻿namespace PRG_MAUI_Car_Register
 {
+    using System.Text.RegularExpressions;
     class Vehicle
     {
         // Medlemsvariabler
@@ -103,10 +104,14 @@
             get { return year; }
             set
             {
-                if (value < 1895 || value > DateTime.Now.Year + 1)
-                {
-                    throw new ArgumentException($"Årsmodellen måste vara mellan 1895 och {DateTime.Now.Year + 1}.");
-                }
+                if (!Regex.IsMatch(value.ToString(), @"^[1-2][0-9]{3}$"))
+
+                    throw new ArgumentException("Årsmodell måste vara ett fyrsiffrigt tal.");
+
+                if (value < 1895 || value > DateTime.Now.Year)
+
+                    throw new ArgumentException($"Årsmodell måste vara mellan 1895 och {DateTime.Now.Year}.");
+
                 year = value;
             }
         }
