@@ -67,7 +67,16 @@
         public string Model
         {
             get { return model; }
-            set { this.model = value; }
+            set
+            {
+
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Modellen får inte vara tom.");
+                if (!value.All(c => char.IsLetter(c) || c == ' ' || c == '-'))
+                    throw new ArgumentException("Modellen får bara innehålla bokstäver.");
+                model = value;
+
+            }
         }
 
         //TODO Modell ska valideras, sparas i objektet och visas i UI
