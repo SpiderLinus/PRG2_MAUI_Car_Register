@@ -9,6 +9,8 @@
         private string manufacturer = string.Empty;
         private string model = string.Empty;
 
+        private int year = 0;
+
         // Konstruktor (en metod med samma namn som klassen, som returnerar ett objekt)
         public Vehicle(Type vehicleType) // en konstruktor kan, men måste inte, ta parametrar
         {
@@ -96,12 +98,23 @@
         }
 
         //TODO Lägg till möjligheten att spara realistisk årsmodell, validera, spara och visa i objektet och visas i UI. Tips: Regex.IsMatch()
-
+        public int Year
+        {
+            get { return year; }
+            set
+            {
+                if (value < 1895 || value > DateTime.Now.Year + 1)
+                {
+                    throw new ArgumentException($"Årsmodellen måste vara mellan 1895 och {DateTime.Now.Year + 1}.");
+                }
+                year = value;
+            }
+        }
 
         //TODO Modifiera overriden på ToString() så att allt visas som önskat i UIs listBox
         public override string ToString()
         {
-            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model;
+            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model + "\t" + this.year;
         }
     }
 }
