@@ -1,5 +1,6 @@
 ﻿namespace PRG_MAUI_Car_Register
 {
+    using System.Text.RegularExpressions;
     class Vehicle
     {
         // Medlemsvariabler
@@ -8,6 +9,8 @@
         private string registrationNumber = string.Empty;
         private string manufacturer = string.Empty;
         private string model = string.Empty;
+
+        private int year = 0;
 
         // Konstruktor (en metod med samma namn som klassen, som returnerar ett objekt)
         public Vehicle(Type vehicleType) // en konstruktor kan, men måste inte, ta parametrar
@@ -67,23 +70,56 @@
         public string Model
         {
             get { return model; }
-            set { this.model = value; }
+            set
+            {
+
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Modellen får inte vara tom.");
+                if (!value.All(c => char.IsLetter(c) || c == ' ' || c == '-'))
+                    throw new ArgumentException("Modellen får bara innehålla bokstäver.");
+                model = value;
+
+            }
         }
 
         //TODO Modell ska valideras, sparas i objektet och visas i UI
         public string Manufacturer
         {
             get { return manufacturer; }
-            set { this.manufacturer = value; }
+            set
+            {
+
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Tillverkare får inte vara tom.");
+                if (!value.All(c => char.IsLetter(c) || c == ' ' || c == '-'))
+                    throw new ArgumentException("Tillverkare får bara innehålla bokstäver.");
+                manufacturer = value;
+
+            }
         }
 
         //TODO Lägg till möjligheten att spara realistisk årsmodell, validera, spara och visa i objektet och visas i UI. Tips: Regex.IsMatch()
+        public int Year
+        {
+            get { return year; }
+            set
+            {
+                if (!Regex.IsMatch(value.ToString(), @"^[1-2][0-9]{3}$"))
 
+                    throw new ArgumentException("Årsmodell måste vara ett fyrsiffrigt tal.");
+
+                if (value < 1895 || value > DateTime.Now.Year)
+
+                    throw new ArgumentException($"Årsmodell måste vara mellan 1895 och {DateTime.Now.Year}.");
+
+                year = value;
+            }
+        }
 
         //TODO Modifiera overriden på ToString() så att allt visas som önskat i UIs listBox
         public override string ToString()
         {
-            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model;
+            return this.registrationNumber + "\t" + this.vehicleType + "\t" + this.manufacturer + "\t" + this.model + "\t" + this.year;
         }
     }
 }
